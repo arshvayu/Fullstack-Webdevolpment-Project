@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="js/angular.min.js"></script>
+    <script>
+        var module = angular.module("myModule", []);
+        module.controller("myController", function ($scope, $http) {
+
+            $scope.doFetchAllCities = function () {
+                var url = "/cities";
+                $http.get(url).then(fxGoodKuch, fxBadKuch);
+                function fxGoodKuch(response) {
+                    alert(JSON.stringify(response.data));
+                    $scope.cityJsonAry = response.data;
+
+                }
+                function fxBadKuch(response) {
+                    alert(JSON.stringify(response.data));
+
+                }
+            }
+
+
+            $scope.doFetchAllmedicine = function () {
+                var url = "/medicines";
+                $http.get(url).then(fxGoodKuch, fxBadKuch);
+                function fxGoodKuch(response) {
+                    alert(JSON.stringify(response.data));
+                    $scope.medicineJsonAry = response.data;
+
+                }
+                function fxBadKuch(response) {
+                    alert(JSON.stringify(response.data));
+
+                }
+            }
+
+            $scope.dosearchnow=function(resp)
+            {
+                var url="/searchnow?city="+$scope.selCity+"&med="+$scope.selMed;
+                //json request
+                    $http.get(url).then(fxGoodKuch,fxBadKuch);
+
+                    function fxGoodKuch(response)//containing JSON
+                    {
+                            alert(JSON.stringify(response.data));//data is fixed-JSON array
+                            $scope.searchJsonAry=response.data;//data->JSON
+
+                    }
+                    function fxBadKuch(response)
+                    {
+                            alert(JSON.stringify(response.data));//data is fixed
+                    }
+            }
+
+            $scope.getDetails = function (txtemail) {
+                //alert(emailid);
+                var url = "/json-fetch-record?txtEmail=" + txtemail;
+                //json request
+                $http.get(url).then(fxGoodKuch, fxBadKuch);
+
+                function fxGoodKuch(response)//containing JSON
+                {
+                    // alert(JSON.stringify(response.data));//data is fixed-JSON array
+                    $scope.detailJsonAry = response.data;//data->JSON
+
+                }
+                function fxBadKuch(response) {
+                    alert(JSON.stringify(response.data));//data is fixed
+                }
+            }
+        });
+
+    </script>
+</head>
+<form action="findmedicine" method="get">
+
+<body ng-app="myModule" ng-controller="myController" ng-init="doFetchAllCities();doFetchAllmedicine()">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="inputEmail4" class="form-label">City</label>
+                <select class="form-select" id="city" name="city" ng-model="selCity">
+                    <option value="select">select</option>
+                    <option ng-repeat="obj in cityJsonAry" value="{{obj.city}}">{{obj.city}}</option>
+                </select>
+            </div>
+
+
+
+            <div class="col-md-4">
+                <label for="inputEmail4" class="form-label">Medicine</label>
+                <select class="form-select" id="medicine" name="medicine" ng-model="selMed">
+                    <option value="select">select</option>
+                    <option ng-repeat="obj in medicineJsonAry" value="{{obj.txtmedicine}}">{{obj.txtmedicine}}</option>
+
+
+                </select>
+            </div>
+
+
+        </div>
+        <div class="row mt-3>">
+            <center>
+                <input type="button" value="search" ng-click="dosearchnow();" </center>
+        </div>
+
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3" ng-repeat="obj in searchJsonAry">
+                <div class="card">
+                    <img src="uploads/{{obj.pic}}" height="100" class="card-img-top" >
+                    <div class="card-body">
+                      <h5 class="card-title">{{obj.txtmedicine}}</h5>
+                      <p class="card-text">
+                          <table width="100%">
+                            <tr><th>Expiry date:{{obj.exdate}}</th>
+                                <tr><th> Quantiy {{obj.qty}}</th>
+                               <tr> <th> Type:{{obj.intype}}</th>
+                               <tr> <th>Disease:{{obj.disease}}</th>
+                               <tr> <th>Time:{{obj.contimes}}</th>
+                               <tr> <th>To:{{obj.contimed}}</th>
+
+                          </table>
+                      </p>
+                      <a href="#" class="btn btn-primary" ng-click="getDetails(obj.txtemail);" data-bs-toggle="modal" data-bs-target="#details" >Show contact Details</a>
+                    </div>
+                  </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal" tabindex="-1" id="details">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    {{detailJsonAry[0].txtname}}
+                  </p>
+              <p>
+                {{detailJsonAry[0].txtMobile}}
+              </p>
+
+              <p>
+                {{detailJsonAry[0].address}}
+            </p>
+            <p>
+                {{detailJsonAry[0].city}}
+            </p>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+</form>
+</body>
+
+</html>

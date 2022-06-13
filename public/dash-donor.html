@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+
+        <script>
+            function showUser()
+            {alert(localStorage.getItem("activeUser"));
+            var data=localStorage.getItem("activeUser");
+               document.getElementById("actUser").innerHTML=data;
+
+            }
+            function doLogout()
+            {
+                localStorage.removeItem("activeUser");
+                window.location.replace("index.html");
+            }
+        </script>
+    </head>
+
+<body onload="showUser();">
+    <div class="row bg-primary">
+        <div class="col-md-12">
+            <h3>Welome:<span id="actUser">*</span></h3>
+            <center>
+                <h3>Donor Dash</h3>
+            </center>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="pics/profile.jpg" class="card-img-top" alt="...">
+                    <center>
+                    <div class="card-body">
+                        
+                        <a href="/profile" class="btn btn-primary">Profile</a>
+                    </div>
+                    </center>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="pics/medicine2.png" class="card-img-top" alt="...">
+                    <center>
+                    <div class="card-body">
+                        
+                        
+                        <a href="/post" class="btn btn-primary">Post Medicine</a>
+                    </div>
+                    </center>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="pics/logout.png" class="card-img-top" alt="...">
+                    <center>
+                    <div class="card-body">
+                        
+                        
+                        <a href="#" onclick="doLogout();" class="btn btn-primary">Logout</a>
+                    </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>

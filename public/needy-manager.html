@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Document</title>
+    <script>
+        var module = angular.module("myModule", []);
+        module.controller("myController", function ($scope,$http) {
+         $scope.doFetchAll=function()
+        {
+            var url="/fetch-all";
+            $http.get(url).then(fxGoodKuch,fxBadKuch);
+            function fxGoodKuch(response)
+            {
+                alert(JSON.stringify(response.data));
+                $scope.dbJsonAry=response.data;
+
+            }
+            function fxBadKuch(response)
+            {
+                alert(JSON.stringify(response.data));
+
+            }
+
+        }
+
+
+        $scope.doDeleteDb=function(txtEmail)
+            {
+                if(confirm("R U Sure?? ")==false)
+                return;
+
+                   $http.get("/delete-recordDB?xEmail="+txtEmail).then(fxGood,fxError);
+                   function fxGood(response)//containg text/string
+                   {
+                       alert(response.data);
+                       $scope.doFetchAll();
+                   }
+                   function fxError(response)
+                   {
+                       alert(response.data);
+                   }
+
+            }
+
+    })
+
+    
+
+
+    </script>
+</head>
+<body ng-app="myModule" ng-controller="myController">
+<center>
+    <input type="button" value="Fetch Donor " ng-click="doFetchAll();">
+    <p>
+        <center>
+            <table  class="table">
+                <thead>
+                <tr>
+                    <th scope="col">emailid</th>
+                    <th scope="col">name</th>
+                    <th scope="col">mobile</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">proof</th>
+                    <th scope="col">proofpic</th>
+                    <th scope="col">usertype</th>
+                    <th scope="col">delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="obj in dbJsonAry">
+                    <th>{{obj.txtEmail}}</th>
+                    <th>{{obj.txtname}}</th>
+                    <th>{{obj.txtMobile}}</th>
+                    <th>{{obj.address}}</th>
+                    <th>{{obj.city}}</th>
+                    <th>{{obj.state}}</th>
+                    <th>{{obj.proof}}</th>
+                    <th>
+                        <img src="uploads/{{obj.proofpic}}" width="50" height="50">
+                        
+                    </th>
+                    <th>{{obj.utype}}</th>
+                    <th>
+                        <a href="#" ng-click="doDeleteDb(obj.txtEmail);">Delete</a>
+                    </th>
+        
+                </tr>
+                </tbody>
+
+            </table>
+        </center>
+    </p>
+
+
+    </center>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    
+    </body>
+    
+</body>
+</html>
